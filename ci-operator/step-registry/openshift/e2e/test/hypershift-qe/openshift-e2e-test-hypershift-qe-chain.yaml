@@ -1,6 +1,7 @@
 chain:
   as: openshift-e2e-test-hypershift-qe
   steps:
+  - ref: wait
   - ref: cucushift-hypershift-extended-health-check
   - ref: cucushift-pre
   - ref: openshift-extended-test

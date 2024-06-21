@@ -6,7 +6,9 @@ set -o errexit
 set -o pipefail
 
 MC_KUBECONFIG_FILE="${SHARED_DIR}/hs-mc.kubeconfig"
+echo "The cluster-name is: $(cat ${SHARED_DIR}/cluster-name)."
 if [ -f "${MC_KUBECONFIG_FILE}" ]; then
+  echo 'The ${MC_KUBECONFIG_FILE} env var exists.'
   export KUBECONFIG="${SHARED_DIR}/hs-mc.kubeconfig"
   _jsonpath="{.items[?(@.metadata.name==\"$(cat ${SHARED_DIR}/cluster-name)\")].metadata.namespace}"
   HYPERSHIFT_NAMESPACE=$(oc get hostedclusters -A -ojsonpath="$_jsonpath")
@@ -22,6 +24,7 @@ if [ "$count" -lt 1 ]  ; then
 fi
 #Limitation: we always & only select the first hostedcluster to add idp-htpasswd. "
 cluster_name=$(oc get hostedclusters -n "$HYPERSHIFT_NAMESPACE" -o jsonpath='{.items[0].metadata.name}')
+echo "The cluster_name retrieved: $cluster_name."
 
 # prepare users
 users=""
